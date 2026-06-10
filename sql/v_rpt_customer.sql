@@ -1,0 +1,45 @@
+-- =============================================================================
+-- v_rpt_customer
+-- BigQuery view: customer segmentation and lifetime value metrics
+--
+-- TODO: Add the full CREATE OR REPLACE VIEW statement here.
+--
+-- Expected aggregation: one row per year-segment-customer (or year-segment
+-- depending on granularity needed for the dashboard panel).
+--
+-- Expected columns:
+--   order_year          -- calendar year
+--   segment             -- Consumer / Corporate / Home Office
+--   customer_name       -- individual customer identifier
+--   total_revenue       -- sum of sales for this customer-year
+--   total_profit        -- sum of profit for this customer-year
+--   profit_margin_pct   -- profit / revenue × 100
+--   order_count         -- distinct order_id count
+--   units_sold          -- sum of quantity
+--   avg_order_value     -- total_revenue / order_count
+--   revenue_share_pct   -- customer revenue as % of segment revenue that year
+--   customer_rank       -- RANK() by revenue within year-segment
+--
+-- Source table:
+--   `plasma-origin-497414-f2.superstore_sales.v_stg_superstore`
+-- =============================================================================
+
+-- CREATE OR REPLACE VIEW `plasma-origin-497414-f2.superstore_sales.v_rpt_customer` AS
+-- SELECT
+--   order_year,
+--   segment,
+--   customer_name,
+--   ROUND(SUM(sales), 2)                                   AS total_revenue,
+--   ROUND(SUM(profit), 2)                                  AS total_profit,
+--   ROUND(SAFE_DIVIDE(SUM(profit), SUM(sales)) * 100, 2)  AS profit_margin_pct,
+--   COUNT(DISTINCT order_id)                               AS order_count,
+--   SUM(quantity)                                          AS units_sold,
+--   ROUND(SAFE_DIVIDE(SUM(sales), COUNT(DISTINCT order_id)), 2) AS avg_order_value,
+--   ROUND(SAFE_DIVIDE(
+--     SUM(sales),
+--     SUM(SUM(sales)) OVER (PARTITION BY order_year, segment)
+--   ) * 100, 2)                                            AS revenue_share_pct,
+--   RANK() OVER (PARTITION BY order_year, segment ORDER BY SUM(sales) DESC) AS customer_rank
+-- FROM `plasma-origin-497414-f2.superstore_sales.v_stg_superstore`
+-- GROUP BY order_year, segment, customer_name
+-- ORDER BY order_year, segment, total_revenue DESC;

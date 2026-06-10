@@ -1,0 +1,48 @@
+-- =============================================================================
+-- v_rpt_product
+-- BigQuery view: product-level performance metrics
+--
+-- TODO: Add the full CREATE OR REPLACE VIEW statement here.
+--
+-- Expected aggregation: one row per year-category-sub_category-product_name.
+--
+-- Expected columns:
+--   order_year            -- calendar year
+--   category              -- product category
+--   sub_category          -- product sub-category
+--   product_name          -- individual product identifier
+--   total_revenue         -- sum of sales
+--   total_profit          -- sum of profit
+--   profit_margin_pct     -- profit / revenue × 100
+--   order_count           -- distinct order_id count
+--   units_sold            -- sum of quantity
+--   avg_discount_pct      -- average discount × 100
+--   revenue_rank          -- RANK() by revenue within year-category
+--   margin_tier           -- 'High Margin' / 'Medium Margin' / 'Low Margin' / 'Loss-Making'
+--
+-- Source table:
+--   `plasma-origin-497414-f2.superstore_sales.v_stg_superstore`
+-- =============================================================================
+
+-- CREATE OR REPLACE VIEW `plasma-origin-497414-f2.superstore_sales.v_rpt_product` AS
+-- SELECT
+--   order_year,
+--   category,
+--   sub_category,
+--   product_name,
+--   ROUND(SUM(sales), 2)                                   AS total_revenue,
+--   ROUND(SUM(profit), 2)                                  AS total_profit,
+--   ROUND(SAFE_DIVIDE(SUM(profit), SUM(sales)) * 100, 2)  AS profit_margin_pct,
+--   COUNT(DISTINCT order_id)                               AS order_count,
+--   SUM(quantity)                                          AS units_sold,
+--   ROUND(AVG(discount) * 100, 2)                         AS avg_discount_pct,
+--   RANK() OVER (PARTITION BY order_year, category ORDER BY SUM(sales) DESC) AS revenue_rank,
+--   CASE
+--     WHEN SAFE_DIVIDE(SUM(profit), SUM(sales)) >= 0.20 THEN 'High Margin'
+--     WHEN SAFE_DIVIDE(SUM(profit), SUM(sales)) >= 0.10 THEN 'Medium Margin'
+--     WHEN SAFE_DIVIDE(SUM(profit), SUM(sales)) >= 0    THEN 'Low Margin'
+--     ELSE                                                    'Loss-Making'
+--   END                                                    AS margin_tier
+-- FROM `plasma-origin-497414-f2.superstore_sales.v_stg_superstore`
+-- GROUP BY order_year, category, sub_category, product_name
+-- ORDER BY order_year, category, total_revenue DESC;

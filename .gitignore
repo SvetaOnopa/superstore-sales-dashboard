@@ -1,0 +1,37 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local files and logs
+*.log
+.env
+.env.*
+*.tmp
+~$*
+
+# Source data files (large; not needed in portfolio repo)
+*.csv
+*.xlsx
+*.xls
+
+# Working files not intended for the final repo
+PROMPT_FOR_CLAUDE.md
+raw_claude_export.md
+audit.py
+
+# Python cache if any helper scripts are added
+__pycache__/
+*.pyc
+*.pyo
+
+# Editor and IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Helper README files used during repo construction (not portfolio content)
+sql/README.md
+screenshots/README.md
+assets/README.md
