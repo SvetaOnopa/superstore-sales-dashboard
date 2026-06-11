@@ -13,6 +13,12 @@ An executive-level sales analytics dashboard built on **BigQuery + Google Sheets
 
 ---
 
+## Live Dashboard
+
+[Open the live dashboard](https://docs.google.com/spreadsheets/d/1KCHSehYeouF4RoChLFqeGKlLtMb5veQ9MMmQ24jjqjE/edit?usp=sharing)
+
+---
+
 ## Business Problem
 
 Global retail leadership needs a single view of sales performance across five markets (APAC, EU, US, LATAM, Africa), three product categories, and five years — with immediate year-over-year context for every metric. The solution had to:
