@@ -1,5 +1,7 @@
 # Superstore Global Sales Executive Dashboard
 
+**[Open the live dashboard](https://docs.google.com/spreadsheets/d/1KCHSehYeouF4RoChLFqeGKlLtMb5veQ9MMmQ24jjqjE/edit?usp=sharing)**
+
 An executive-level sales analytics dashboard built on **BigQuery + Google Sheets Connected DataSources + Google Apps Script**. The project demonstrates end-to-end analytics engineering: eight BigQuery SQL views feed live Connected DataSource sheets, a 1,203-line Apps Script orchestration layer computes filter-adjusted KPI aggregates, writes to hidden helper tables consumed by embedded charts, and updates year-over-year comparison strings — all within seconds of a filter change.
 
 > **This is not a simple spreadsheet with charts.** It implements a full data pipeline:
@@ -10,12 +12,6 @@ An executive-level sales analytics dashboard built on **BigQuery + Google Sheets
 ## Dashboard Screenshot
 
 ![Superstore Sales Executive Dashboard](screenshots/dashboard.png)
-
----
-
-## Live Dashboard
-
-[Open the live dashboard](https://docs.google.com/spreadsheets/d/1KCHSehYeouF4RoChLFqeGKlLtMb5veQ9MMmQ24jjqjE/edit?usp=sharing)
 
 ---
 
